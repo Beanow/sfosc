@@ -41,7 +41,6 @@ jobs:
           name: Commit and push
           command: |
             cd public
-            git config credential.helper 'cache --timeout=30'
             # This allows pushing without knowing github's key fingerprint ahead of time.
             git config core.sshCommand 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
             git config user.email "bot@sfosc.org"
