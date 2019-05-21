@@ -35,15 +35,18 @@ jobs:
     steps:
       - attach_workspace:
           at: public
-      - run: ls -lah public
+      - add_ssh_keys:
+          fingerprints:
+            - 9f:74:57:dc:23:64:c1:e9:0f:2c:f5:7f:c9:32:59:55
       - run:
           name: Commit and push
           command: |
             cd public
-            git config credential.helper 'cache --timeout=60'
+            git config credential.helper 'cache --timeout=30'
+            # This allows pushing without knowing github's key fingerprint ahead of time.
+            git config core.sshCommand 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
             git config user.email "bot@sfosc.org"
             git config user.name "Deployment Bot"
             git add --all
             git commit -m "Rebuilding site `date`"
-            # Push quietly to prevent showing the token in log
-            git push -q https://${PAGES_TOKEN}@github.com/Beanow/sfosc-pages.git master
+            git push git@github.com:Beanow/sfosc-pages.git master
