@@ -1,4 +1,4 @@
-baseURL = "https://sfosc.org/"
+baseURL = "https://beanow.github.io/sfosc-pages/"
 languageCode = "en-us"
 title = "Sustainable Free and Open Source Communities"
 theme = "hugo-theme-learn"

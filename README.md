@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Beanow/sfosc/tree/master.svg?style=svg)](https://circleci.com/gh/Beanow/sfosc/tree/master)
+
 Welcome to the SFOSC! This is the place to contribute content to the website,
 and collaborate on writing new social contracts, documenting business models,
 and more.
