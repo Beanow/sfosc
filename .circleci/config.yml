@@ -1,0 +1,49 @@
+version: 2.1
+workflows:
+  main:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
+jobs:
+  build:
+    docker:
+      - image: cibuilds/hugo:0.55
+    steps:
+      - checkout
+      - run:
+          name: Clone pages repo
+          command: git clone --depth 1 https://github.com/Beanow/sfosc-pages.git public
+      - run:
+          name: Hugo build
+          command: HUGO_ENV=production hugo
+      # - run:
+      #     name: "Test Website"
+      #     command: htmlproofer ./public --allow-hash-href --check-html --empty-alt-ignore --disable-external
+      - persist_to_workspace:
+          root: public
+          paths:
+            - '.'
+  deploy:
+    docker:
+      - image: cibuilds/base
+    steps:
+      - attach_workspace:
+          at: public
+      - run: ls -lah public
+      - run:
+          name: Commit and push
+          command: |
+            cd public
+            git config credential.helper 'cache --timeout=60'
+            git config user.email "bot@sfosc.org"
+            git config user.name "Deployment Bot"
+            git add --all
+            git commit -m "Rebuilding site `date`"
+            # Push quietly to prevent showing the token in log
+            git push -q https://${PAGES_TOKEN}@github.com/Beanow/sfosc-pages.git master
